@@ -32,6 +32,8 @@ public class GenericSpecification<T> implements Specification<T> {
                 return criteriaBuilder.notEqual(root.get(criteria.getKey()),argumento);
             case IN:
                 return root.get(criteria.getKey()).in(argumentos);
+            case LIKE :
+                return criteriaBuilder.like(criteriaBuilder.upper(root.get(criteria.getKey())),"%" + ((String)argumento).toUpperCase() + "%");
             default:
                 return null;
         }

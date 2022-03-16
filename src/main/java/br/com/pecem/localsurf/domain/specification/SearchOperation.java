@@ -6,5 +6,6 @@ public enum SearchOperation {
     NEGATION,
     GREATER_THAN,
     LESS_THAN,
-    IN;
+    IN,
+    LIKE;
 }

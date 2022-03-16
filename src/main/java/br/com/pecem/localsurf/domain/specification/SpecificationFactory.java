@@ -22,4 +22,9 @@ public class SpecificationFactory<T> {
         GenericSpecificationsBuilder<T> builder = new GenericSpecificationsBuilder<>();
         return builder.with(key,SearchOperation.LESS_THAN,Collections.singletonList(arg)).build();
     }
+
+    public Specification<T> isLike(String key, Comparable arg){
+        GenericSpecificationsBuilder<T> builder = new GenericSpecificationsBuilder<>();
+        return builder.with(key,SearchOperation.LIKE,Collections.singletonList(arg)).build();
+    }
 }
