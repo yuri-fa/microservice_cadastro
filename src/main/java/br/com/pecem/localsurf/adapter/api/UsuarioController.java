@@ -72,7 +72,7 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioCadastroDTOList);
     }
 
-    @PutMapping(path = "{usuarioId}",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(path = "{usuarioId}",consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UsuarioCadastroDTO> avaliarCadastro(@RequestBody AvaliacaoCadastroDTO avaliacaoCadastroDTO, @PathVariable("usuarioId") Long usuarioId){
         try{
             Usuario usuario = usuarioUseCase.avaliarCadastro(usuarioId,avaliacaoCadastroDTO);
@@ -92,5 +92,30 @@ public class UsuarioController {
         }catch (AvaliarUsuarioException aue){
             return (ResponseEntity<UsuarioCadastroDTO>) ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PutMapping(path ="{usuarioId}",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UsuarioCadastroDTO> atualizarUsuario(@RequestBody UsuarioCadastroDTO usuarioCadastroDTO,@PathVariable("usuarioId") Long usuarioId){
+        var usuario = Usuario.builder()
+                .statusUsuario(StatusUsuario.ALTERADO)
+                .apelido(usuarioCadastroDTO.getApelido())
+                .email(usuarioCadastroDTO.getEmail())
+                .foto(usuarioCadastroDTO.getFoto())
+                .nome(usuarioCadastroDTO.getNome())
+                .telefone(usuarioCadastroDTO.getTelefone()).build();
+        Usuario usuarioRetorno = usuarioUseCase.atualizacaoUsuario(usuario,usuarioId);
+        var usuarioDTO = UsuarioCadastroDTO.builder()
+                .id(usuarioRetorno.getId())
+                .nome(usuarioRetorno.getNome())
+                .email(usuarioRetorno.getEmail())
+                .telefone(usuarioRetorno.getTelefone())
+                .dataCadastro(usuarioRetorno.getDataCadastro())
+                .status(usuarioRetorno.getStatusUsuario().name())
+                .foto(usuarioRetorno.getFoto())
+                .role(Objects.isNull(usuarioRetorno.getRole()) ?
+                        RoleDTO.builder().build() :
+                        RoleDTO.builder().id(usuarioRetorno.getRole().getId()).permissao(usuarioRetorno.getRole().getPermissao()).build())
+                .build();
+        return  ResponseEntity.ok(usuarioDTO);
     }
 }

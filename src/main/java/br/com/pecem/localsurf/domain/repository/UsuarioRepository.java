@@ -1,4 +1,4 @@
-package br.com.pecem.localsurf.domain.respository;
+package br.com.pecem.localsurf.domain.repository;
 
 import br.com.pecem.localsurf.domain.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;

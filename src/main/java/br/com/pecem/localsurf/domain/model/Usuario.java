@@ -3,6 +3,7 @@ package br.com.pecem.localsurf.domain.model;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+import org.springframework.cglib.core.GeneratorStrategy;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.lang.Nullable;
 
@@ -37,7 +38,10 @@ public class Usuario {
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Date dataCadastro;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataSaida;
     @Column
+    @Enumerated(EnumType.STRING)
     private StatusUsuario statusUsuario;
     @JoinColumn(referencedColumnName = "id")
     @ManyToOne(cascade = CascadeType.ALL)

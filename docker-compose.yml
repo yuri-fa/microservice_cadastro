@@ -1,0 +1,32 @@
+version: '3.9'
+
+networks:
+  postgres-network:
+    external: true
+
+volumes:
+  postgresdb:
+    external: true
+
+services:
+  cadastrodb:
+    image: postgres
+    ports: 
+      - 5432:5432
+    volumes:
+      - postgresdb:/var/lib/postgresql/data
+    networks : 
+      - postgres-network
+    environment:
+      - POSTGRES_PASSWORD=Postgres2018!
+  web-pgadmin: 
+    image: dpage/pgadmin4
+    ports: 
+      - 15432:80
+    networks : 
+      - postgres-network
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=yurialcantara03@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=PgAdmin2018!
+    depends_on:
+    - cadastrodb
