@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <property resource="bootstrap.properties"/>
+    <contextName>${spring.application.name}</contextName>
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %mdc %m %marker%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}</pattern>
+        </encoder>
+<!--        <layout class="ch.qos.logback.classic.PatternLayout">-->
+<!--            <Pattern>-->
+<!--                %black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1.}): %msg%n%throwable-->
+<!--            </Pattern>-->
+<!--        </layout>-->
+    </appender>
+
+    <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <fieldName>data</fieldName>
+                    <timeZone>America/Sao_Paulo</timeZone>
+                </timestamp>
+                <contextName>
+                    <fieldName>app</fieldName>
+                </contextName>
+                <loggerName/>
+                <threadName>
+                    <fieldName>thread</fieldName>
+                </threadName>
+                <logLevel>
+                    <fieldName>level</fieldName>
+                </logLevel>
+                <mdc/>
+                <message>
+                    <fieldName>mensagem</fieldName>
+                </message>
+                <arguments/>
+                <logstashMarkers/>
+                <tags/>
+                <stackTrace>
+                    <fieldName>stack</fieldName>
+                </stackTrace>
+            </providers>
+        </encoder>
+    </appender>
+    <root level="info">
+        <appender-ref ref="JSON"/>
+    </root>
+    <logger name="com.baeldung" level="trace" additivity="false">
+        <appender-ref ref="JSON"/>
+    </logger>
+</configuration>

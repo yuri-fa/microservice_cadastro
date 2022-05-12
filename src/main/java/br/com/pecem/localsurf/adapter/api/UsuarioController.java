@@ -4,6 +4,7 @@ import br.com.pecem.localsurf.adapter.api.request.AvaliacaoCadastroDTO;
 import br.com.pecem.localsurf.adapter.api.request.RoleDTO;
 import br.com.pecem.localsurf.adapter.api.request.UsuarioCadastroDTO;
 import br.com.pecem.localsurf.domain.exception.AvaliarUsuarioException;
+import br.com.pecem.localsurf.domain.model.LogEvento;
 import br.com.pecem.localsurf.domain.model.Roles;
 import br.com.pecem.localsurf.domain.model.StatusUsuario;
 import br.com.pecem.localsurf.domain.model.Usuario;
@@ -27,8 +28,9 @@ public class UsuarioController {
     private UsuarioUseCase usuarioUseCase;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> cadastro(@RequestBody UsuarioCadastroDTO usuarioCadastroDTO){
-        log.info("Cadastro do usuario " + usuarioCadastroDTO);
+    @LogEvento
+    public ResponseEntity<Void> cadastro(@RequestHeader(HeadersRequest.TRANSACAO_ID) String transacao,
+            @RequestBody UsuarioCadastroDTO usuarioCadastroDTO){
         var usuario = Usuario.builder()
                 .nome(usuarioCadastroDTO.getNome())
                 .apelido(usuarioCadastroDTO.getApelido())
@@ -40,7 +42,6 @@ public class UsuarioController {
                 .role(new Roles("Administrador"))
                 .build();
         usuarioUseCase.cadastrarUsuario(usuario);
-        log.info("Usuario " + usuario.getNome() + " cadastrado com sucesso");
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
