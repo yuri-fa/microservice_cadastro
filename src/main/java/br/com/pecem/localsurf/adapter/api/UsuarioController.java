@@ -46,6 +46,7 @@ public class UsuarioController {
     }
 
     @GetMapping()
+    @LogEvento
     public ResponseEntity<List<UsuarioCadastroDTO>> consulta(@RequestParam(value = "nome",required = false) String nome,
                                            @RequestParam(value = "apelido",required = false) String apelido,
                                            @RequestParam(value = "dataCadastroInicio",required = false) Date dataCadastroInicio,
@@ -64,9 +65,6 @@ public class UsuarioController {
                     .dataCadastro(usuario.getDataCadastro())
                     .status(usuario.getStatusUsuario().name())
                     .foto(usuario.getFoto())
-                    .role(Objects.isNull(usuario.getRole()) ?
-                            RoleDTO.builder().build() :
-                            RoleDTO.builder().id(usuario.getRole().getId()).permissao(usuario.getRole().getPermissao()).build())
                     .build();
             return usuarioDTO;
         }).collect(Collectors.toList());

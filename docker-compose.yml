@@ -9,7 +9,7 @@ volumes:
     external: true
 
 services:
-  cadastrodb:
+  postgredb:
     image: postgres
     ports: 
       - 5432:5432
@@ -29,4 +29,17 @@ services:
       - PGADMIN_DEFAULT_EMAIL=yurialcantara03@gmail.com
       - PGADMIN_DEFAULT_PASSWORD=PgAdmin2018!
     depends_on:
-    - cadastrodb
+    - postgredb
+  app:
+    image: app-1.0.0
+    ports:
+      - 8080:8080
+    links:
+      - postgredb:postgredb
+    networks:
+      - postgres-network
+    environment:
+     - DATA_BASE_URL=jdbc:postgresql://postgredb:5432/cadastrodb
+    depends_on:
+      - postgredb
+      - web-pgadmin
